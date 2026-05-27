@@ -344,6 +344,8 @@ tztime local {
 - Keeps battery states visually distinct: charging `⚡`, discharging `🔋`, idle `⏸️`, full `🔌`, unknown `❓`.
 - Rewrites the battery item to `🪫 <percent>` when capacity drops below 20%.
 - The low-battery threshold is controlled in the wrapper with `LOW_BATTERY_THRESHOLD`, defaulting to `20`.
+- Adds a simple network status between the battery block and the weather block.
+- Network status uses `nmcli` and shows `📶`, `🔌`, `📶🔌`, or `⛔`.
 - Adds weather between the battery block and the clock.
 - Weather is fetched from `wttr.in` with `?format=3`.
 - The current setup does not use a manually selected city.
@@ -357,7 +359,7 @@ tztime local {
 Expected bar shape:
 
 ```text
-☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | ⏸️ 80.48% | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
+☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | ⏸️ 80.48% | 📶 or 🔌 or 📶🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
 ```
 
 Low-battery example:
