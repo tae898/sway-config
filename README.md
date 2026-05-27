@@ -67,6 +67,8 @@ output eDP-1 scale 1.5
 ### Workspaces
 
 - `Super+1` through `Super+0`: switch to workspaces 1 through 10
+- `Super+Tab`: switch to the next workspace
+- `Super+Shift+Tab`: switch to the previous workspace
 - `Super+Shift+1` through `Super+Shift+0`: move the focused window to workspaces 1 through 10
 - New workspaces are created on the currently focused output when you switch to a number/name that does not exist yet.
 
@@ -234,10 +236,38 @@ sudo usermod -aG video "$USER"
 
 - Default terminal is `foot`.
 - Foot font size was increased because the default text looked too small on the HiDPI display.
+- Foot now uses an explicit light color palette instead of the terminal default dark theme.
+- `Super+Shift+c` only reloads Sway. It does not reload Foot colors for existing terminal windows.
+- To apply Foot color changes, start a new Foot instance. If needed, stop the server first with `pkill foot`.
 
 ```ini
 [main]
 font=monospace:size=12
+
+[colors]
+foreground=4c4f69
+background=eff1f5
+selection-foreground=eff1f5
+selection-background=7287fd
+urls=1e66f5
+
+regular0=5c5f77
+regular1=d20f39
+regular2=40a02b
+regular3=df8e1d
+regular4=1e66f5
+regular5=ea76cb
+regular6=179299
+regular7=acb0be
+
+bright0=6c6f85
+bright1=d20f39
+bright2=40a02b
+bright3=df8e1d
+bright4=1e66f5
+bright5=ea76cb
+bright6=179299
+bright7=bcc0cc
 ```
 
 ## Bar
@@ -301,9 +331,11 @@ battery all {
 }
 
 tztime local {
-        format = "🕒 %Y-%m-%d %H:%M:%S"
+        format = "🕒 %a: %Y-%m-%d %H:%M:%S"
 }
 ```
+
+- `%a` adds the abbreviated weekday, for example `Wed`.
 
 ### Wrapper script behavior
 
@@ -325,7 +357,7 @@ tztime local {
 Expected bar shape:
 
 ```text
-☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | ⏸️ 80.48% | ☀️ +17°C | 🕒 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
+☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | ⏸️ 80.48% | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
 ```
 
 Low-battery example:
