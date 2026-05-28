@@ -237,14 +237,14 @@ sudo usermod -aG video "$USER"
 ## Terminal
 
 - Default terminal is `foot`.
-- Foot font size was increased because the default text looked too small on the HiDPI display.
+- Foot font size is set to `11` because the default text looked too small on the HiDPI display.
 - Foot now uses an explicit light color palette instead of the terminal default dark theme.
 - `Super+Shift+c` only reloads Sway. It does not reload Foot colors for existing terminal windows.
 - To apply Foot color changes, start a new Foot instance. If needed, stop the server first with `pkill foot`.
 
 ```ini
 [main]
-font=monospace:size=12
+font=monospace:size=11
 
 [colors]
 foreground=4c4f69
