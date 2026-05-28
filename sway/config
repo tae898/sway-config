@@ -56,6 +56,7 @@ exec swayidle -w \
 
 exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
 exec sh -c 'pgrep -x fcitx5 >/dev/null || fcitx5 -d'
+exec_always sh -c 'pgrep -x wl-paste >/dev/null || wl-paste --watch cliphist store -max-items 1000'
 exec_always sh -c 'dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
 exec_always sh ~/.config/sway/apply-output-modes.sh
 
@@ -108,6 +109,9 @@ bindsym --locked Shift+space nop
 
     # Start your launcher
     bindsym $mod+d exec $menu
+
+    # Show clipboard history and copy the selection to the regular and primary clipboards
+    bindsym $mod+Ctrl+v exec bash -lc 'cliphist list | wofi --dmenu --insensitive --lines 35 | cliphist decode | tee >(wl-copy) | wl-copy -p'
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
