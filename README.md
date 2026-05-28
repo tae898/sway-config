@@ -54,6 +54,7 @@ exec_always sh ~/.config/sway/apply-output-modes.sh
 
 - `Super+Return`: open terminal (`foot`)
 - `Super+d`: open app launcher (`wofi`)
+- `Super+Ctrl+v`: open clipboard history in `wofi` and copy the chosen entry back to the regular and primary clipboards
 - `Super+Shift+c`: reload Sway config
 - `Super+Escape`: lock screen with `swaylock`
 - `Super+Shift+e`: exit/logout from Sway with confirmation
@@ -99,6 +100,7 @@ exec_always sh ~/.config/sway/apply-output-modes.sh
 
 - `Ctrl+Space`: toggle `fcitx5` between US and Hangul
 - `Shift+Space`: intentionally disabled with `nop`
+- `wl-paste --watch cliphist store -max-items 1000` starts from Sway on startup and reload to keep clipboard history available across the session
 - Closing the lid triggers `bindswitch` to disable `eDP-1`
 - Opening the lid triggers `bindswitch` to re-enable `eDP-1`
 
