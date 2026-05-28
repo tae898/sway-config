@@ -57,6 +57,7 @@ exec swayidle -w \
 exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
 exec sh -c 'pgrep -x fcitx5 >/dev/null || fcitx5 -d'
 exec_always sh -c 'dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
+exec_always sh ~/.config/sway/apply-output-modes.sh
 
 ### Input configuration
 #
@@ -87,6 +88,8 @@ input type:keyboard {
     repeat_rate 40
 }
 
+# Let sway disable only the internal panel; logind handles whether lid close
+# should suspend the machine.
 bindswitch --locked lid:on output eDP-1 disable
 bindswitch --locked lid:off output eDP-1 enable
 

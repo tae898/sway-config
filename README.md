@@ -36,11 +36,13 @@ These were created during earlier attempts and intentionally removed from the fi
 
 ## Display
 
+- External displays are configured by `sway/apply-output-modes.sh`, which queries Sway outputs, skips internal `eDP-*` panels, and applies the highest available resolution and refresh rate for each connected external output.
 - Internal display `eDP-1` is pinned to `scale 1.5`.
 - Reason: reloads were resetting the live scale back to `2.0` until it was made persistent in config.
 
 ```conf
 output eDP-1 scale 1.5
+exec_always sh ~/.config/sway/apply-output-modes.sh
 ```
 
 ## Shortcuts
@@ -402,8 +404,10 @@ exec swayidle -w \
 
 ### Logind defaults currently in effect
 
-- There are no local `systemd-logind` overrides configured for lid/power behavior.
-- The machine is using the default logind actions: lid close `suspend`, lid close while docked `ignore`, power key `poweroff`, suspend key `suspend`, hibernate key `hibernate`, idle action `ignore`.
+- A local `systemd-logind` override is tracked in `systemd/logind.conf.d/ignore-lid-on-ac.conf`.
+- Docked lid close is ignored by logind.
+- Lid close while on external power is ignored by logind.
+- Other logind actions remain at their system defaults: power key `poweroff`, suspend key `suspend`, hibernate key `hibernate`, idle action `ignore`.
 
 ### Manual lock shortcut
 
@@ -418,8 +422,8 @@ bindsym $mod+Escape exec swaylock -f -c 000000
 
 ### External monitor and lid close
 
-- Docked lid close is still ignored by logind.
-- A Sway lid-switch hook now handles the laptop panel directly:
+- Logind is configured to ignore lid close when docked or on external power.
+- A Sway lid-switch hook handles the laptop panel directly:
 
 ```conf
 bindswitch --locked lid:on output eDP-1 disable
@@ -428,6 +432,7 @@ bindswitch --locked lid:off output eDP-1 enable
 
 - Closing the lid disables `eDP-1` inside Sway.
 - Reopening the lid re-enables `eDP-1`.
+- When charging or docked, lid close should not suspend the machine just because the lid event fired.
 - Once `eDP-1` is disabled, Sway can move those workspaces onto the remaining active output.
 - Windows are not destroyed.
 - Reopening the lid does not guarantee the previous workspace arrangement will be restored automatically.
