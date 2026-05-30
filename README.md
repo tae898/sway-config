@@ -404,6 +404,7 @@ exec swayidle -w \
 ### Logind defaults currently in effect
 
 - A local `systemd-logind` override is tracked in `systemd/logind.conf.d/ignore-lid-on-ac.conf`.
+- That override sets `HandleLidSwitchExternalPower=ignore`.
 - Lid close on battery follows the system default: `suspend`.
 - Lid close while on external power is overridden to `ignore`.
 - Docked lid close remains ignored by the system default.
