@@ -101,8 +101,6 @@ exec_always sh ~/.config/sway/apply-output-modes.sh
 - `Ctrl+Space`: toggle `fcitx5` between US and Hangul
 - `Shift+Space`: intentionally disabled with `nop`
 - `wl-paste --watch cliphist store -max-items 1000` starts from Sway on startup and reload to keep clipboard history available across the session
-- Closing the lid triggers `bindswitch` to disable `eDP-1`
-- Opening the lid triggers `bindswitch` to re-enable `eDP-1`
 
 ### Hardware and screenshot keys
 
@@ -393,8 +391,7 @@ makoctl reload
 
 - `swayidle` is started directly from the Sway config.
 - After 5 minutes of inactivity, the session locks with `swaylock`.
-- After 10 minutes of inactivity, Sway turns the displays off.
-- On activity resume, the displays are turned back on.
+- After 10 minutes of inactivity, Sway powers off outputs and turns them back on again when activity resumes.
 - Before system sleep, `swayidle` locks the session first.
 
 ```conf
@@ -407,8 +404,9 @@ exec swayidle -w \
 ### Logind defaults currently in effect
 
 - A local `systemd-logind` override is tracked in `systemd/logind.conf.d/ignore-lid-on-ac.conf`.
-- Docked lid close is ignored by logind.
-- Lid close while on external power is ignored by logind.
+- Lid close on battery follows the system default: `suspend`.
+- Lid close while on external power is overridden to `ignore`.
+- Docked lid close remains ignored by the system default.
 - Other logind actions remain at their system defaults: power key `poweroff`, suspend key `suspend`, hibernate key `hibernate`, idle action `ignore`.
 
 ### Manual lock shortcut
@@ -424,7 +422,7 @@ bindsym $mod+Escape exec swaylock -f -c 000000
 
 ### External monitor and lid close
 
-- Logind is configured to ignore lid close when docked or on external power.
+- Logind is configured to ignore lid close on external power, while battery and docked behavior stay at their defaults.
 - A Sway lid-switch hook handles the laptop panel directly:
 
 ```conf
@@ -434,7 +432,8 @@ bindswitch --locked lid:off output eDP-1 enable
 
 - Closing the lid disables `eDP-1` inside Sway.
 - Reopening the lid re-enables `eDP-1`.
-- When charging or docked, lid close should not suspend the machine just because the lid event fired.
+- On battery, logind may also suspend the machine when the lid closes.
+- On external power, logind ignores the lid-close event.
 - Once `eDP-1` is disabled, Sway can move those workspaces onto the remaining active output.
 - Windows are not destroyed.
 - Reopening the lid does not guarantee the previous workspace arrangement will be restored automatically.
