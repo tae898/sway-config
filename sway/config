@@ -41,16 +41,17 @@ output eDP-1 scale 1.5
 # Example configuration:
 #
 # exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+#          timeout 600 'swaylock -f -c 000000' \
+#          timeout 1200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
 #          before-sleep 'swaylock -f -c 000000'
 #
-# This will lock your screen after 300 seconds of inactivity and also lock
-# your screen before your computer goes to sleep.
+# This will lock your screen after 600 seconds of inactivity, turn off
+# your outputs after 1200 seconds, and also lock your screen before your
+# computer goes to sleep.
 
 exec swayidle -w \
-         timeout 300 'swaylock -f -c 000000' \
-         timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         timeout 600 'swaylock -f -c 000000' \
+         timeout 1200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -f -c 000000'
 
 exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
