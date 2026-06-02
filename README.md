@@ -390,14 +390,14 @@ makoctl reload
 ### Sway idle handling
 
 - `swayidle` is started directly from the Sway config.
-- After 5 minutes of inactivity, the session locks with `swaylock`.
-- After 10 minutes of inactivity, Sway powers off outputs and turns them back on again when activity resumes.
+- After 10 minutes of inactivity, the session locks with `swaylock`.
+- After 20 minutes of inactivity, Sway powers off outputs and turns them back on again when activity resumes.
 - Before system sleep, `swayidle` locks the session first.
 
 ```conf
 exec swayidle -w \
-                                 timeout 300 'swaylock -f -c 000000' \
-                                 timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+                                 timeout 600 'swaylock -f -c 000000' \
+                                 timeout 1200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
                                  before-sleep 'swaylock -f -c 000000'
 ```
 
