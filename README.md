@@ -7,8 +7,11 @@ This repository documents the current working Sway setup on this machine. It ref
 These are the config files that currently matter.
 
 - `~/.config/sway/config`
-- `~/.config/sway/status.sh`
-- `~/.config/i3status/config`
+- `~/.config/waybar/config.jsonc`
+- `~/.config/waybar/style.css`
+- `~/.config/waybar/weather.sh`
+- `~/.config/waybar/input-method.sh`
+- `~/.config/waybar/microphone.sh`
 - `~/.config/foot/foot.ini`
 - `~/.config/environment.d/90-fcitx5.conf`
 - `~/.config/fcitx5/profile`
@@ -19,8 +22,11 @@ These are the config files that currently matter.
 This repository now stores curated copies of the live config files so it can be used as both documentation and a real backup of the setup.
 
 - `sway/config`
-- `sway/status.sh`
-- `i3status/config`
+- `waybar/config.jsonc`
+- `waybar/style.css`
+- `waybar/weather.sh`
+- `waybar/input-method.sh`
+- `waybar/microphone.sh`
 - `mako/config`
 - `foot/foot.ini`
 - `environment.d/90-fcitx5.conf`
@@ -165,8 +171,8 @@ Meaning:
 - `dbus-update-activation-environment` exports the required environment for Qt and XWayland apps.
 
 ```conf
-exec sh -c 'pgrep -x fcitx5 >/dev/null || fcitx5 -d'
-exec_always sh -c 'dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
+exec /bin/sh -c '/usr/bin/pgrep -x fcitx5 >/dev/null || /usr/bin/fcitx5 -d'
+exec_always /bin/sh -c '/usr/bin/dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
 ```
 
 Persistent environment file:
@@ -276,98 +282,51 @@ bright7=bcc0cc
 
 ### Overview
 
-- The built-in `swaybar` is still used.
-- `swaybar` runs `~/.config/sway/status.sh`, which wraps `i3status`.
-- The wrapper adds brightness, mic state, weather, and the input-method flag from `fcitx5`.
-- The `fcitx5` tray icon near Insync is separate from the text flag in the status line.
+- `waybar` now provides the top bar instead of the built-in `swaybar`.
+- Sway starts `waybar` with `exec_always`, so a Sway config reload also restarts the bar.
+- The `tray` module is now handled by Waybar, which is why `nm-applet --indicator` is started from Sway.
+- The bar keeps the same core status set: brightness, speaker volume, mic state, battery, network, weather, clock, input-method flag, and tray icons.
+- The old `swaybar` wrapper and `i3status` files were removed because they are no longer used.
+- The bar no longer hardcodes a fixed height; Waybar now sizes itself from font and padding so it adapts better when switching monitors.
 
 ```conf
-bar {
-    position top
-    status_command sh ~/.config/sway/status.sh
+exec_always /bin/sh -c '/usr/bin/pkill -x waybar; /usr/bin/waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css'
+```
 
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
+### Modules
+
+- Built-in Waybar modules handle workspaces, the focused window title, brightness, speaker volume, battery, network, clock, and the tray.
+- Mic state is shown in its own pill through `waybar/microphone.sh`.
+- Workspaces stay on the left, the focused window title sits in the middle area, and the status modules stay on the right.
+- The tray is now a native Waybar tray instead of the old `swaybar` tray.
+
+```jsonc
+{
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
+    "modules-right": ["backlight", "pulseaudio", "custom/microphone", "custom/network-wifi", "custom/network-ethernet", "custom/weather", "clock", "custom/input-method", "battery", "tray"]
 }
 ```
 
-### i3status
+### Custom script behavior
 
-- `i3status` updates every second.
-- Native `i3status` modules currently shown:
-  - volume
-  - battery
-  - clock
-
-```conf
-general {
-        colors = true
-        interval = 1
-        output_format = "i3bar"
-}
-
-order += "volume master"
-order += "battery all"
-order += "tztime local"
-
-volume master {
-        format = "🔊 %volume"
-        format_muted = "🔇 muted"
-        device = "default"
-        mixer = "Master"
-        mixer_idx = 0
-}
-
-battery all {
-        format = "%status %percentage"
-        format_down = "🔋 n/a"
-        status_chr = "⚡"
-        status_bat = "🔋"
-        status_full = "🔌"
-        status_idle = "⏸️"
-        status_unk = "❓"
-        low_threshold = 20
-}
-
-tztime local {
-        format = "🕒 %a: %Y-%m-%d %H:%M:%S"
-}
-```
-
-- `%a` adds the abbreviated weekday, for example `Wed`.
-
-### Wrapper script behavior
-
-- Adds brightness as `☀️ <percent>`.
-- Adds mic state as `🎤` when active, `🚫` when muted, `❓` if unknown.
-- Keeps battery states visually distinct: charging `⚡`, discharging `🔋`, idle `⏸️`, full `🔌`, unknown `❓`.
-- Rewrites the battery item to `🪫 <percent>` when capacity drops below 20%.
-- The low-battery threshold is controlled in the wrapper with `LOW_BATTERY_THRESHOLD`, defaulting to `20`.
-- Adds a simple network status between the battery block and the weather block.
-- Network status uses `nmcli` and shows `📶`, `🔌`, `📶🔌`, or `⛔`.
-- Adds weather between the battery block and the clock.
-- Weather is fetched from `wttr.in` with `?format=3`.
-- The current setup does not use a manually selected city.
-- Location is inferred by `wttr.in` from the public IP address of the request.
-- Weather results are cached for 15 minutes in `~/.cache/sway-weather.txt` to avoid doing a network request every second.
-- Adds input-method flag as:
-  - `🇺🇸` for `keyboard-us`
-  - `🇰🇷` for `hangul`
-- The flag is appended at the end of the status list, so it appears to the right of the time and immediately left of the tray icons.
+- `waybar/weather.sh` keeps the old `wttr.in` cache logic and refreshes at most every 15 minutes.
+- `waybar/input-method.sh` maps `fcitx5-remote -n` to `🇺🇸`, `🇰🇷`, `❓`, or `⌨️`.
+- `waybar/microphone.sh` maps the default audio source state to `🎤`, `🚫`, or `❓`.
+- `waybar/network.sh` renders Wi-Fi and Ethernet as separate pills by checking `nmcli` for each device type.
+- Clicking the microphone pill toggles mute on the default audio source through `wpctl`.
+- Weather still reads from `~/.cache/sway-weather.txt`, so no extra cache migration was needed.
+- Battery styling is now handled by Waybar states and CSS instead of rewriting the i3bar JSON stream.
 
 Expected bar shape:
 
 ```text
-☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | ⏸️ 80.48% | 📶 or 🔌 or 📶🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
+workspace buttons | window title | ☀️ 50% | 🔊 35% or 🔇 muted | 🎤 or 🚫 | 📶 | 🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷 | 🔋 80% | tray
 ```
 
 Low-battery example:
 
 ```text
-☀️ 50% | 🎤 or 🚫 | 🔊 35% or 🔇 muted | 🪫 14% | ☀️ +17°C | 🕒 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷
+workspace buttons | window title | ☀️ 50% | 🔊 35% | 🎤 | 📶 | 🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 | 🪫 14% | tray
 ```
 
 ## Notifications
@@ -474,7 +433,7 @@ Resize keys in resize mode:
 - The command is guarded so it does not launch duplicates.
 
 ```conf
-exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
+exec /bin/sh -c '/usr/bin/pgrep -x insync >/dev/null || /usr/bin/insync start --no-daemon'
 ```
 
 ### Fcitx5
@@ -483,6 +442,16 @@ exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
 - Because it starts on login, its tray icon appears in the top-right tray area.
 - That tray icon only means `fcitx5` is running.
 - The status-line flag is the actual US/KR mode indicator.
+
+### NetworkManager applet
+
+- `nm-applet --indicator` is started directly from Sway.
+- It is intended to live in the Waybar tray.
+- This change was made because the applet was not reliably clickable in the old `swaybar` tray setup.
+
+```conf
+exec /usr/bin/nm-applet --indicator
+```
 
 ## Final state summary
 
@@ -494,9 +463,9 @@ What changed from stock setup:
 - volume keys switched to `wpctl`
 - brightness keys switched to `brightnessctl`
 - user added to `video` group so brightness control works
-- built-in `swaybar` kept, but wrapped with `status.sh`
-- bar shows brightness, mic state, weather, and active input-language flag
-- battery states are visually distinct, including a separate low-battery icon below 20%
+- `waybar` replaced the old `swaybar` and `i3status` setup completely
+- bar keeps brightness, speaker volume, mic state, weather, battery, network, clock, tray icons, and the active input-language flag
+- `nm-applet --indicator` now autostarts for the Waybar tray
 - Insync autostarts from Sway instead of XDG desktop autostart
 - Korean input migrated from abandoned `ibus` attempts to working `fcitx5-hangul`
 - `Ctrl+Space` is the only intended input toggle
@@ -510,6 +479,8 @@ What changed from stock setup:
 ```bash
 swaymsg -t get_outputs
 swaymsg -t get_inputs
+pgrep -a waybar
+pgrep -a nm-applet
 brightnessctl info
 wpctl status
 pgrep -a insync

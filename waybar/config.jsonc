@@ -1,0 +1,91 @@
+{
+    "layer": "top",
+    "position": "top",
+    "spacing": 4,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/window"
+    ],
+    "modules-right": [
+        "backlight",
+        "pulseaudio",
+        "custom/microphone",
+        "custom/network-wifi",
+        "custom/network-ethernet",
+        "custom/weather",
+        "clock",
+        "custom/input-method",
+        "battery",
+        "tray"
+    ],
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true
+    },
+    "sway/window": {
+        "max-length": 80
+    },
+    "tray": {
+        "spacing": 6
+    },
+    "backlight": {
+        "format": "☀️ {percent}%"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "🔇 muted",
+        "format-icons": {
+            "headphone": "🎧",
+            "hands-free": "🎧",
+            "headset": "🎧",
+            "portable": "🔊",
+            "car": "🔊",
+            "default": ["🔈", "🔉", "🔊"]
+        }
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 20
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "⚡ {capacity}%",
+        "format-plugged": "🔌 {capacity}%",
+        "format-full": "🔌 {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["🪫", "🪫", "🔋", "🔋", "🔋"]
+    },
+    "custom/network-wifi": {
+        "exec": "/bin/sh ~/.config/waybar/network.sh wifi",
+        "interval": 5,
+        "return-type": "json",
+        "format": "{}"
+    },
+    "custom/network-ethernet": {
+        "exec": "/bin/sh ~/.config/waybar/network.sh ethernet",
+        "interval": 5,
+        "return-type": "json",
+        "format": "{}"
+    },
+    "custom/weather": {
+        "exec": "/bin/sh ~/.config/waybar/weather.sh",
+        "interval": 900,
+        "format": "{}"
+    },
+    "clock": {
+        "format": "🕒 {:%a: %Y-%m-%d %H:%M:%S}",
+        "tooltip": false
+    },
+    "custom/input-method": {
+        "exec": "/bin/sh ~/.config/waybar/input-method.sh",
+        "interval": 2,
+        "format": "{}"
+    },
+    "custom/microphone": {
+        "exec": "/bin/sh ~/.config/waybar/microphone.sh",
+        "interval": 2,
+        "format": "{}",
+        "on-click": "/usr/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+    }
+}

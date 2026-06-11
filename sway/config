@@ -54,11 +54,12 @@ exec swayidle -w \
          timeout 1200 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep 'swaylock -f -c 000000'
 
-exec sh -c 'pgrep -x insync >/dev/null || insync start --no-daemon'
-exec sh -c 'pgrep -x fcitx5 >/dev/null || fcitx5 -d'
-exec_always sh -c 'pgrep -x wl-paste >/dev/null || wl-paste --watch cliphist store -max-items 1000'
-exec_always sh -c 'dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
-exec_always sh ~/.config/sway/apply-output-modes.sh
+exec /usr/bin/nm-applet --indicator
+exec /bin/sh -c '/usr/bin/pgrep -x insync >/dev/null || /usr/bin/insync start --no-daemon'
+exec /bin/sh -c '/usr/bin/pgrep -x fcitx5 >/dev/null || /usr/bin/fcitx5 -d'
+exec_always /bin/sh -c '/usr/bin/pgrep -x wl-paste >/dev/null || /usr/bin/wl-paste --watch cliphist store -max-items 1000'
+exec_always /bin/sh -c '/usr/bin/dbus-update-activation-environment --systemd XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx QT_IM_MODULES="wayland;fcitx"'
+exec_always /bin/sh ~/.config/sway/apply-output-modes.sh
 
 ### Input configuration
 #
@@ -267,19 +268,7 @@ bindsym $mod+r mode "resize"
 #
 # Status Bar:
 #
-# Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-
-    # When the status_command prints a new line to stdout, swaybar updates.
-    # Wrap i3status so the bar can also show brightness.
-    status_command sh ~/.config/sway/status.sh
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-}
+# Restart Waybar on login and on config reload.
+exec_always /bin/sh -c '/usr/bin/pkill -x waybar; /usr/bin/waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css'
 
 include /etc/sway/config.d/*
