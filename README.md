@@ -320,13 +320,13 @@ exec_always /bin/sh -c '/usr/bin/pkill -x waybar; /usr/bin/waybar -c ~/.config/w
 Expected bar shape:
 
 ```text
-workspace buttons | window title | ☀️ 50% | 🔊 35% or 🔇 muted | 🎤 or 🚫 | 📶 | 🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷 | 🔋 80% | tray
+workspace buttons | window title | ☀️ 50% | 🔊 35% or 🔇 muted | 🎤 or 🚫 | 📶 | 🖧 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 or 🇰🇷 | 🔋 80% | tray
 ```
 
 Low-battery example:
 
 ```text
-workspace buttons | window title | ☀️ 50% | 🔊 35% | 🎤 | 📶 | 🔌 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 | 🪫 14% | tray
+workspace buttons | window title | ☀️ 50% | 🔊 35% | 🎤 | 📶 | 🖧 | ☀️ +17°C | 🕒 Wed: 2026-05-27 09:59:22 | 🇺🇸 | 🪫 14% | tray
 ```
 
 ## Notifications

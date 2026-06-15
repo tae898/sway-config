@@ -17,9 +17,9 @@ case "$mode" in
         ;;
     ethernet)
         if is_connected ethernet; then
-            printf '{"text":"🔌","class":"connected","tooltip":"Ethernet connected"}\n'
+            printf '{"text":"🖧","class":"connected","tooltip":"Ethernet connected"}\n'
         else
-            printf '{"text":"🔌","class":"disconnected","tooltip":"Ethernet disconnected"}\n'
+            printf '{"text":"🖧","class":"disconnected","tooltip":"Ethernet disconnected"}\n'
         fi
         ;;
     *)
