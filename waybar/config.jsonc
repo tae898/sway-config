@@ -8,9 +8,9 @@
         "sway/window"
     ],
     "modules-right": [
+        "bluetooth",
         "backlight",
         "pulseaudio",
-        "bluetooth",
         "custom/microphone",
         "custom/network-wifi",
         "custom/network-ethernet",
