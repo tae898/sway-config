@@ -43,7 +43,8 @@
             "portable": "🔊",
             "car": "🔊",
             "default": ["🔈", "🔉", "🔊"]
-        }
+        },
+        "on-click": "/usr/bin/pavucontrol"
     },
     "battery": {
         "states": {
