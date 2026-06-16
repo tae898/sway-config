@@ -98,7 +98,8 @@
         "exec": "/bin/sh ~/.config/waybar/input-method.sh",
         "interval": 2,
         "return-type": "json",
-        "format": "{}"
+        "format": "{}",
+        "on-click": "/usr/bin/fcitx5-remote -t"
     },
     "custom/microphone": {
         "exec": "/bin/sh ~/.config/waybar/microphone.sh",
