@@ -46,6 +46,7 @@ window#waybar {
 
 #backlight,
 #pulseaudio,
+#bluetooth,
 #custom-microphone,
 #battery,
 #custom-network-wifi,
@@ -100,4 +101,15 @@ window#waybar {
 #battery.critical {
     background: #d20f39;
     color: #eff1f5;
+}
+
+#bluetooth {
+    background: #7287fd;
+    color: #eff1f5;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+    background: #ccd0da;
+    color: #4c4f69;
 }

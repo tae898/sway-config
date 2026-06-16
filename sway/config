@@ -55,6 +55,7 @@ exec swayidle -w \
          before-sleep 'swaylock -f -c 000000'
 
 exec /usr/bin/nm-applet --indicator
+exec /usr/bin/blueman-applet
 exec /bin/sh -c '/usr/bin/pgrep -x insync >/dev/null || /usr/bin/insync start --no-daemon'
 exec /bin/sh -c '/usr/bin/pgrep -x fcitx5 >/dev/null || /usr/bin/fcitx5 -d'
 exec_always /bin/sh -c '/usr/bin/pgrep -x wl-paste >/dev/null || /usr/bin/wl-paste --watch cliphist store -max-items 1000'
