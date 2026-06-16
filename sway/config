@@ -270,6 +270,6 @@ bindsym $mod+r mode "resize"
 # Status Bar:
 #
 # Restart Waybar on login and on config reload.
-exec_always /bin/sh -c '/usr/bin/pkill -x waybar; TZDIR=/home/tk/.config/waybar/zoneinfo /usr/bin/waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css'
+exec_always /bin/sh -c '/usr/bin/pkill -x waybar; /usr/bin/waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css'
 
 include /etc/sway/config.d/*
