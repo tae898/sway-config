@@ -97,6 +97,7 @@
     "custom/input-method": {
         "exec": "/bin/sh ~/.config/waybar/input-method.sh",
         "interval": 2,
+        "return-type": "json",
         "format": "{}"
     },
     "custom/microphone": {
