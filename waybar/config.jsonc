@@ -80,7 +80,14 @@
     },
     "clock": {
         "format": "🕒 {:%a: %Y-%m-%d %H:%M:%S}",
-        "tooltip": false
+        "tooltip": true,
+        "tooltip-format": "<b>{:%A, %B %d, %Y}</b>\n\n<tt><small>{calendar}</small></tt>\n\n{tz_list}",
+        "timezones": [
+            "",
+            "UTC",
+            "Asia/Seoul"
+        ],
+        "timezone-tooltip-format": "{:%R %Z (UTC%z)}"
     },
     "custom/input-method": {
         "exec": "/bin/sh ~/.config/waybar/input-method.sh",
