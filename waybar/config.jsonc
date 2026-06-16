@@ -73,10 +73,10 @@
         "on-click": "/usr/bin/nm-connection-editor"
     },
     "custom/weather": {
-        "exec": "/bin/sh ~/.config/waybar/weather.sh",
+        "exec": "python3 ~/.config/waybar/weather.py",
         "interval": 900,
-        "format": "{}",
-        "on-click": "/usr/bin/xdg-open \"https://wttr.in/\""
+        "return-type": "json",
+        "format": "{}"
     },
     "clock": {
         "format": "🕒 {:%a: %Y-%m-%d %H:%M:%S}",
