@@ -272,6 +272,4 @@ bindsym $mod+r mode "resize"
 # Restart Waybar on login and on config reload.
 exec_always /bin/sh -c '/usr/bin/pkill -x waybar; /usr/bin/waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/style.css'
 
-for_window [title="Battery Statistics"] floating enable, resize set 800 600, move position center
-
 include /etc/sway/config.d/*

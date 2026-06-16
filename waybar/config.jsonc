@@ -55,10 +55,8 @@
         "format-charging": "⚡ {capacity}%",
         "format-plugged": "🔌 {capacity}%",
         "format-full": "🔌 {capacity}%",
-        "format-alt": "{time} {icon}",
         "format-icons": ["🪫", "🪫", "🔋", "🔋", "🔋"],
-        "tooltip-format": "Time remaining: {time}\nPower draw: {power}W\nCycles: {cycles}\nHealth: {health}%",
-        "on-click": "/usr/bin/foot -T 'Battery Statistics' -e /bin/sh -c '/usr/bin/upower -i /org/freedesktop/UPower/devices/battery_BAT1 && echo && echo \"Press Enter to close...\" && read dummy'"
+        "tooltip-format": "Time remaining: {time}\nPower draw: {power}W\nCycles: {cycles}\nHealth: {health}%"
     },
     "custom/network-wifi": {
         "exec": "/bin/sh ~/.config/waybar/network.sh wifi",
