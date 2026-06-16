@@ -76,7 +76,7 @@
         "exec": "/bin/sh ~/.config/waybar/weather.sh",
         "interval": 900,
         "format": "{}",
-        "on-click": "/usr/bin/foot -T 'Weather Forecast' -e /bin/sh -c '/usr/bin/curl -s https://wttr.in/ && echo && echo "Press Enter to close..." && read'"
+        "on-click": "/usr/bin/foot -T 'Weather Forecast' -e /bin/sh -c '/usr/bin/curl -s https://wttr.in/ && echo && echo \"Press Enter to close...\" && read'"
     },
     "clock": {
         "format": "🕒 {:%a: %Y-%m-%d %H:%M:%S}",
