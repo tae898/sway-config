@@ -87,7 +87,12 @@
             "UTC",
             "Asia/Seoul"
         ],
-        "timezone-tooltip-format": "{:%R %Z (UTC%z)}"
+        "timezone-tooltip-format": "{:%R %Z (UTC%z)}",
+        "calendar": {
+            "mode": "month",
+            "on-scroll": 1,
+            "iso8601": true
+        }
     },
     "custom/input-method": {
         "exec": "/bin/sh ~/.config/waybar/input-method.sh",
