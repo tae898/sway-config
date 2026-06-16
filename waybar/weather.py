@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import time
+from datetime import datetime
 import urllib.request
 
 CACHE_FILE = os.path.expanduser("~/.cache/sway-weather-j1.json")
@@ -91,16 +92,42 @@ def main():
             ""
         ]
         
-        hourly = data["weather"][0]["hourly"]
-        for h in hourly:
-            t = int(h["time"])
-            time_str = f"{t//100:02d}:00"
-            h_temp = h["tempC"]
-            h_code = h["weatherCode"]
-            h_emoji = get_emoji(h_code)
-            h_desc = h["weatherDesc"][0]["value"]
-            tooltip_lines.append(f"{time_str}  {h_emoji}  {h_temp}°C  ({h_desc})")
+        current_hour = time.localtime(now).tm_hour
+        
+        # Collect future hourly blocks for today and tomorrow
+        candidates = []
+        for day_offset in [0, 1]:
+            if day_offset >= len(data["weather"]):
+                continue
+            day_data = data["weather"][day_offset]
+            date_str = day_data["date"]
             
+            try:
+                dt = datetime.strptime(date_str, "%Y-%m-%d")
+                day_name = dt.strftime("%a")
+            except Exception:
+                day_name = ""
+                
+            for h in day_data["hourly"]:
+                t = int(h["time"])
+                block_hour = t // 100
+                
+                # Filter out past blocks of today (each covers block_hour to block_hour + 3)
+                if day_offset == 0 and current_hour >= block_hour + 3:
+                    continue
+                    
+                time_str = f"{block_hour:02d}:00"
+                h_temp = h["tempC"]
+                h_code = h["weatherCode"]
+                h_emoji = get_emoji(h_code)
+                h_desc = h["weatherDesc"][0]["value"]
+                
+                label = f"{day_name} {time_str}" if day_name else time_str
+                candidates.append(f"{label}  {h_emoji}  {h_temp}°C  ({h_desc})")
+                
+        # Take the next 8 blocks (24 hours)
+        tooltip_lines.extend(candidates[:8])
+        
         tooltip = "\n".join(tooltip_lines)
         
         print(json.dumps({
