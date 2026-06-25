@@ -80,6 +80,7 @@
         "format": "{}"
     },
     "clock": {
+        "interval": 1,
         "format": "🕒 {:%a: %Y-%m-%d %H:%M:%S}",
         "tooltip": true,
         "tooltip-format": "<b>{:%A, %B %d, %Y}</b>\n\n<tt><small>{calendar}</small></tt>\n\n{tz_list}",
